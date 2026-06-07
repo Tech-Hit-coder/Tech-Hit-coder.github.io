@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Quest – Become an AI Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & ROOT ===== */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg: #0e1117;
+  --bg2: #161b26;
+  --bg3: #1d2535;
+  --bg4: #242e42;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.13);
+  --text: #f0f2f8;
+  --muted: #8892aa;
+  --dim: #4a5472;
+
+  --xp: #58cc02;
+  --xp-dark: #3d9900;
+  --fire: #ff9600;
+  --gem: #1cb0f6;
+  --heart: #ff4b4b;
+
+  --l1: #6c63ff; --l1b: rgba(108,99,255,0.15);
+  --l2: #00c896; --l2b: rgba(0,200,150,0.12);
+  --l3: #4ecdc4; --l3b: rgba(78,205,196,0.12);
+  --l4: #ffd166; --l4b: rgba(255,209,102,0.12);
+  --l5: #f7931e; --l5b: rgba(247,147,30,0.12);
+  --l6: #ff6b6b; --l6b: rgba(255,107,107,0.12);
+  --l7: #c77dff; --l7b: rgba(199,125,255,0.12);
+  --l8: #ff9a3c; --l8b: rgba(255,154,60,0.12);
+
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 7px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 99px; }
+
+/* ===== LAYOUT ===== */
+.app { display: flex; min-height: 100vh; }
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: 280px; flex-shrink: 0;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  position: sticky; top: 0; height: 100vh;
+  overflow-y: auto;
+  z-index: 10;
+}
+.sidebar-logo {
+  padding: 24px 24px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.logo-mark {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 22px; font-weight: 900; letter-spacing: -.02em;
+}
+.logo-icon {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: linear-gradient(135deg, #6c63ff, #00c896);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+.logo-sub { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; margin-top: 2px; }
+
+/* Stats bar */
+.stats-bar {
+  display: flex; gap: 0;
+  border-bottom: 1px solid var(--border);
+}
+.stat-item {
+  flex: 1; padding: 14px 12px; text-align: center;
+  border-right: 1px solid var(--border);
+  cursor: default;
+}
+.stat-item:last-child { border-right: none; }
+.stat-val { font-size: 18px; font-weight: 900; }
+.stat-lbl { font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; margin-top: 2px; }
+.fire-val { color: var(--fire); }
+.xp-val { color: var(--xp); }
+.gem-val { color: var(--gem); }
+
+/* Nav levels */
+.nav-section { padding: 14px 16px 8px; }
+.nav-section-label { font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--dim); margin-bottom: 8px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: var(--radius-sm);
+  cursor: pointer; transition: background .15s;
+  font-size: 13.5px; font-weight: 700;
+  margin-bottom: 2px;
+  position: relative;
+}
+.nav-item:hover { background: var(--bg3); }
+.nav-item.active { background: var(--bg3); }
+.nav-dot {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+  border: 2px solid;
+}
+.nav-dot.done { background: currentColor; }
+.nav-dot.locked { background: var(--bg4); border-color: var(--dim); }
+.nav-progress-pill {
+  margin-left: auto;
+  font-size: 10px; font-weight: 800;
+  padding: 2px 7px; border-radius: 100px;
+  background: rgba(255,255,255,0.07);
+  color: var(--muted);
+}
+
+/* XP bar in sidebar */
+.xp-bar-wrap {
+  margin: 16px 16px 0;
+  background: var(--bg3); border-radius: 99px; height: 8px; overflow: hidden;
+}
+.xp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--xp), #a0e800);
+  border-radius: 99px;
+  transition: width .6s cubic-bezier(.4,0,.2,1);
+}
+.xp-bar-label { font-size: 11px; color: var(--muted); font-weight: 700; padding: 6px 16px 16px; display: flex; justify-content: space-between; }
+
+/* ===== MAIN ===== */
+.main { flex: 1; overflow-y: auto; min-width: 0; }
+
+/* ===== HOME VIEW ===== */
+.home-hero {
+  background: linear-gradient(135deg, #0e1117 0%, #161b26 100%);
+  padding: 48px 48px 40px;
+  border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.home-hero::before {
+  content: '';
+  position: absolute; top: -80px; right: -80px;
+  width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(108,99,255,.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+.home-hero::after {
+  content: '';
+  position: absolute; bottom: -60px; left: 200px;
+  width: 300px; height: 300px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,200,150,.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-greeting { font-size: 13px; font-weight: 800; color: var(--xp); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 10px; }
+.hero-title { font-size: 36px; font-weight: 900; line-height: 1.15; letter-spacing: -.02em; margin-bottom: 10px; }
+.hero-title span { background: linear-gradient(90deg, #6c63ff, #00c896); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hero-sub { font-size: 16px; color: var(--muted); font-family: 'Nunito Sans', sans-serif; line-height: 1.6; max-width: 500px; }
+
+/* Today's mission card */
+.mission-strip {
+  margin: 28px 48px 0;
+  background: var(--bg2);
+  border: 1.5px solid rgba(88,204,2,.25);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  display: flex; align-items: center; gap: 16px;
+  position: relative; z-index: 1;
+}
+.mission-flame { font-size: 32px; flex-shrink: 0; animation: flameBounce 1.5s ease-in-out infinite; }
+@keyframes flameBounce { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1) rotate(-5deg)} }
+.mission-body { flex: 1; min-width: 0; }
+.mission-label { font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--xp); margin-bottom: 4px; }
+.mission-text { font-size: 15px; font-weight: 800; }
+.mission-sub { font-size: 12.5px; color: var(--muted); margin-top: 3px; font-family: 'Nunito Sans', sans-serif; }
+.mission-btn {
+  background: var(--xp); color: #fff; border: none;
+  padding: 10px 20px; border-radius: var(--radius-sm);
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px; font-weight: 900; cursor: pointer;
+  transition: transform .1s, background .15s;
+  white-space: nowrap; flex-shrink: 0;
+}
+.mission-btn:hover { background: var(--xp-dark); transform: translateY(-1px); }
+.mission-btn:active { transform: scale(.97); }
+
+/* Level path grid */
+.path-section { padding: 40px 48px 60px; }
+.section-hd { font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+
+.level-path { display: flex; flex-direction: column; gap: 16px; }
+
+.level-node {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color .2s, transform .15s;
+}
+.level-node:hover { transform: translateY(-2px); border-color: var(--border2); }
+.level-node.locked { opacity: .5; cursor: not-allowed; pointer-events: none; }
+
+.level-node-header {
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px 22px;
+}
+.level-num-badge {
+  width: 48px; height: 48px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 900; flex-shrink: 0;
+}
+.level-node-info { flex: 1; }
+.level-node-tag { font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 3px; }
+.level-node-title { font-size: 18px; font-weight: 900; letter-spacing: -.01em; }
+.level-node-sub { font-size: 12.5px; color: var(--muted); margin-top: 3px; font-family: 'Nunito Sans', sans-serif; }
+.level-node-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+.level-progress-ring { position: relative; width: 52px; height: 52px; }
+.level-progress-ring svg { transform: rotate(-90deg); }
+.level-progress-ring .ring-bg { fill: none; stroke: var(--bg4); stroke-width: 4; }
+.level-progress-ring .ring-fill { fill: none; stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset .6s cubic-bezier(.4,0,.2,1); }
+.ring-pct { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; }
+.level-xp-badge { font-size: 11px; font-weight: 800; color: var(--xp); background: rgba(88,204,2,.12); padding: 3px 8px; border-radius: 100px; }
+
+/* Progress bar on node */
+.node-prog-bar { height: 4px; background: var(--bg3); }
+.node-prog-fill { height: 100%; border-radius: 0 0 0 0; transition: width .6s; }
+
+/* ===== LEVEL VIEW ===== */
+.level-view { padding: 0; }
+
+.level-topbar {
+  display: flex; align-items: center; gap: 16px;
+  padding: 20px 48px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+  position: sticky; top: 0; z-index: 5;
+}
+.back-btn {
+  background: var(--bg3); border: 1px solid var(--border2);
+  color: var(--text); padding: 8px 16px; border-radius: var(--radius-sm);
+  font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800;
+  cursor: pointer; transition: background .15s;
+}
+.back-btn:hover { background: var(--bg4); }
+.topbar-title { font-size: 16px; font-weight: 900; }
+.topbar-sub { font-size: 12px; color: var(--muted); margin-top: 2px; font-weight: 600; }
+.topbar-xp { margin-left: auto; font-size: 13px; font-weight: 900; color: var(--xp); background: rgba(88,204,2,.1); padding: 6px 14px; border-radius: 100px; }
+
+/* Level hero */
+.level-hero {
+  padding: 36px 48px 32px;
+  border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.level-hero-icon { font-size: 48px; margin-bottom: 12px; }
+.level-hero-title { font-size: 30px; font-weight: 900; letter-spacing: -.02em; margin-bottom: 8px; }
+.level-hero-desc { font-size: 15px; color: var(--muted); font-family: 'Nunito Sans', sans-serif; line-height: 1.65; max-width: 600px; }
+
+/* Progress summary */
+.prog-summary {
+  display: flex; gap: 16px; margin-top: 20px; flex-wrap: wrap;
+}
+.prog-chip {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 16px;
+  font-size: 13px; font-weight: 800;
+  display: flex; align-items: center; gap: 8px;
+}
+.prog-chip-val { font-size: 20px; font-weight: 900; }
+
+/* Topics */
+.topics-container { padding: 32px 48px 60px; }
+.topics-grid { display: flex; flex-direction: column; gap: 16px; }
+
+.topic-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.topic-card.completed { border-color: rgba(88,204,2,.3); }
+
+.topic-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 20px;
+  cursor: pointer;
+}
+.topic-check {
+  width: 36px; height: 36px; border-radius: 10px;
+  border: 2.5px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+  transition: all .2s;
+  background: transparent;
+}
+.topic-card.completed .topic-check {
+  background: var(--xp); border-color: var(--xp); color: #fff;
+}
+.topic-info { flex: 1; min-width: 0; }
+.topic-name { font-size: 15px; font-weight: 800; }
+.topic-why { font-size: 12px; color: var(--muted); margin-top: 3px; font-family: 'Nunito Sans', sans-serif; line-height: 1.45; }
+.topic-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.topic-xp { font-size: 12px; font-weight: 800; color: var(--xp); background: rgba(88,204,2,.1); padding: 4px 10px; border-radius: 100px; }
+.topic-expand-icon { color: var(--muted); transition: transform .25s; font-size: 16px; }
+.topic-card.expanded .topic-expand-icon { transform: rotate(180deg); }
+
+/* Resources panel */
+.resources-panel {
+  display: none;
+  border-top: 1px solid var(--border);
+  padding: 20px 20px 20px 20px;
+  background: var(--bg);
+}
+.topic-card.expanded .resources-panel { display: block; }
+
+.resources-title {
+  font-size: 11px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.resources-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.resource-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+
+.resource-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 14px; border-radius: var(--radius-sm);
+  background: var(--bg2); border: 1px solid var(--border);
+  text-decoration: none; color: var(--text);
+  transition: border-color .15s, background .15s;
+}
+.resource-item:hover { border-color: var(--border2); background: var(--bg3); }
+.resource-badge {
+  font-size: 9px; font-weight: 800; letter-spacing: .07em;
+  text-transform: uppercase; padding: 3px 8px; border-radius: 100px;
+  flex-shrink: 0; margin-top: 2px;
+}
+.badge-free { background: rgba(88,204,2,.15); color: #58cc02; }
+.badge-paid { background: rgba(255,209,102,.12); color: #ffd166; }
+.badge-book { background: rgba(108,99,255,.15); color: #a89fff; }
+.badge-yt { background: rgba(255,107,107,.15); color: #ff6b6b; }
+.resource-name { font-size: 13.5px; font-weight: 700; line-height: 1.3; }
+.resource-desc { font-size: 11.5px; color: var(--muted); margin-top: 3px; font-family: 'Nunito Sans', sans-serif; line-height: 1.4; }
+
+/* Daily task */
+.daily-task {
+  background: linear-gradient(135deg, rgba(108,99,255,.1), rgba(0,200,150,.08));
+  border: 1px solid rgba(108,99,255,.25);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  margin-top: 4px;
+}
+.daily-task-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .09em; color: #a89fff; margin-bottom: 6px; }
+.daily-task-text { font-size: 13px; font-weight: 700; line-height: 1.5; color: var(--text); }
+
+/* Complete button */
+.complete-btn {
+  width: 100%; margin-top: 14px;
+  padding: 13px; border-radius: var(--radius-sm);
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px; font-weight: 900;
+  cursor: pointer; border: none;
+  transition: transform .1s, opacity .2s;
+}
+.complete-btn.not-done {
+  background: var(--xp); color: #fff;
+}
+.complete-btn.not-done:hover { opacity: .9; transform: translateY(-1px); }
+.complete-btn.done {
+  background: var(--bg3); color: var(--muted); cursor: default;
+}
+.complete-btn:active { transform: scale(.98); }
+
+/* ===== PROJECT CARD ===== */
+.project-section { margin-top: 40px; }
+.project-card {
+  background: linear-gradient(135deg, rgba(108,99,255,.1), rgba(0,200,150,.08));
+  border: 1px solid rgba(108,99,255,.3);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+.project-label { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #a89fff; margin-bottom: 10px; }
+.project-title { font-size: 17px; font-weight: 900; margin-bottom: 8px; }
+.project-desc { font-size: 14px; color: var(--muted); font-family: 'Nunito Sans', sans-serif; line-height: 1.6; }
+.project-complete-btn {
+  margin-top: 16px;
+  background: linear-gradient(90deg, #6c63ff, #00c896);
+  color: #fff; border: none;
+  padding: 12px 24px; border-radius: var(--radius-sm);
+  font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 900;
+  cursor: pointer; transition: opacity .15s, transform .1s;
+}
+.project-complete-btn:hover { opacity: .88; transform: translateY(-1px); }
+.project-complete-btn.done { background: var(--bg3); color: var(--muted); cursor: default; }
+
+/* ===== EMAIL MODAL ===== */
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.75); backdrop-filter: blur(6px);
+  z-index: 100; display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  animation: fadeIn .2s ease;
+}
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+.modal {
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-radius: 20px; padding: 32px;
+  max-width: 480px; width: 100%;
+  animation: slideUp .25s cubic-bezier(.4,0,.2,1);
+}
+@keyframes slideUp { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
+.modal-icon { font-size: 48px; text-align: center; margin-bottom: 16px; }
+.modal-title { font-size: 22px; font-weight: 900; text-align: center; margin-bottom: 8px; }
+.modal-sub { font-size: 14px; color: var(--muted); text-align: center; line-height: 1.6; font-family: 'Nunito Sans', sans-serif; margin-bottom: 24px; }
+.email-form { display: flex; flex-direction: column; gap: 12px; }
+.email-input {
+  background: var(--bg3); border: 1px solid var(--border2);
+  color: var(--text); border-radius: var(--radius-sm);
+  padding: 13px 16px; font-family: 'Nunito', sans-serif;
+  font-size: 15px; font-weight: 600;
+  outline: none; transition: border-color .2s;
+}
+.email-input:focus { border-color: var(--xp); }
+.modal-save-btn {
+  background: var(--xp); color: #fff; border: none;
+  padding: 14px; border-radius: var(--radius-sm);
+  font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 900;
+  cursor: pointer; transition: background .15s;
+}
+.modal-save-btn:hover { background: var(--xp-dark); }
+.modal-close {
+  width: 100%; background: transparent; border: 1px solid var(--border);
+  color: var(--muted); padding: 12px; border-radius: var(--radius-sm);
+  font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: background .15s;
+}
+.modal-close:hover { background: var(--bg3); }
+
+/* ===== XP TOAST ===== */
+.xp-toast {
+  position: fixed; top: 24px; right: 24px; z-index: 200;
+  background: var(--bg2); border: 1.5px solid var(--xp);
+  border-radius: var(--radius-sm); padding: 14px 20px;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 15px; font-weight: 900; color: var(--xp);
+  animation: toastIn .35s cubic-bezier(.4,0,.2,1);
+  box-shadow: 0 8px 32px rgba(0,0,0,.4);
+  max-width: 280px;
+}
+@keyframes toastIn { from{transform:translateX(60px);opacity:0} to{transform:translateX(0);opacity:1} }
+.xp-toast-icon { font-size: 24px; }
+.xp-toast-msg { font-size: 13px; color: var(--muted); font-weight: 700; margin-top: 2px; font-family: 'Nunito Sans', sans-serif; }
+
+/* ===== STREAK MODAL ===== */
+.streak-card {
+  text-align: center; padding: 8px 0 0;
+}
+.streak-flame-big { font-size: 72px; animation: flameBounce 1s ease-in-out infinite; display: block; margin-bottom: 8px; }
+.streak-num { font-size: 64px; font-weight: 900; color: var(--fire); line-height: 1; }
+.streak-label { font-size: 14px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin-top: 4px; }
+
+/* ===== EMAIL PREVIEW ===== */
+.email-preview {
+  background: #1a2030; border: 1px solid var(--border2);
+  border-radius: var(--radius-sm); padding: 0; overflow: hidden;
+  margin: 16px 0; font-family: 'Nunito Sans', sans-serif;
+}
+.email-header-bar {
+  background: var(--bg3); padding: 12px 16px;
+  font-size: 11px; color: var(--muted); font-weight: 700;
+  border-bottom: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 4px;
+}
+.email-body-preview {
+  padding: 16px;
+  font-size: 13px; color: var(--text); line-height: 1.65;
+}
+.email-subject { font-size: 14px; font-weight: 800; margin-bottom: 8px; color: var(--text); }
+
+/* ===== LEVEL COLORS ===== */
+.lc1 { color: var(--l1); }
+.lc2 { color: var(--l2); }
+.lc3 { color: var(--l3); }
+.lc4 { color: var(--l4); }
+.lc5 { color: var(--l5); }
+.lc6 { color: var(--l6); }
+.lc7 { color: var(--l7); }
+.lc8 { color: var(--l8); }
+
+/* ===== CONFETTI ===== */
+.confetti-piece {
+  position: fixed; width: 10px; height: 10px; border-radius: 2px;
+  pointer-events: none; z-index: 300;
+  animation: confettiFall linear forwards;
+}
+@keyframes confettiFall {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width: 768px) {
+  .sidebar { display: none; }
+  .home-hero { padding: 28px 24px 24px; }
+  .mission-strip { margin: 20px 24px 0; }
+  .path-section, .topics-container { padding: 24px 20px 48px; }
+  .level-topbar { padding: 16px 20px; }
+  .level-hero { padding: 24px 20px 20px; }
+}
+
+/* ===== UTILITIES ===== */
+.hidden { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+</style>
+</head>
+<body>
+
+<h2 class="sr-only">AI Quest – Gamified AI Engineer Learning Roadmap with daily tasks and progress tracking</h2>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <div class="logo-icon">🤖</div>
+        AI Quest
+      </div>
+      <div class="logo-sub">AI Engineer Roadmap</div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-item" title="Day streak" onclick="showStreakModal()">
+        <div class="stat-val fire-val" id="sb-streak">0</div>
+        <div class="stat-lbl" style="color:var(--fire)">🔥 Streak</div>
+      </div>
+      <div class="stat-item" title="Total XP">
+        <div class="stat-val xp-val" id="sb-xp">0</div>
+        <div class="stat-lbl" style="color:var(--xp)">⚡ XP</div>
+      </div>
+      <div class="stat-item" title="Tasks done today">
+        <div class="stat-val gem-val" id="sb-done">0</div>
+        <div class="stat-lbl" style="color:var(--gem)">✅ Done</div>
+      </div>
+    </div>
+
+    <div class="xp-bar-wrap">
+      <div class="xp-bar-fill" id="xp-bar" style="width:0%"></div>
+    </div>
+    <div class="xp-bar-label">
+      <span id="xp-level-label">Level 1</span>
+      <span id="xp-to-next">0 / 500 XP</span>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Levels</div>
+      <div id="nav-items"></div>
+    </div>
+
+    <div style="margin-top:auto; padding:16px; border-top:1px solid var(--border)">
+      <button onclick="showEmailModal()" style="width:100%; background:var(--bg3); border:1px solid var(--border2); color:var(--muted); padding:10px 14px; border-radius:var(--radius-sm); font-family:'Nunito',sans-serif; font-size:13px; font-weight:800; cursor:pointer; display:flex; align-items:center; gap:8px; justify-content:center;">
+        📧 Reminder Email Setup
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main" id="main-content">
+    <!-- Views injected by JS -->
+  </main>
+
+</div>
+
+<!-- MODAL CONTAINER -->
+<div id="modal-root"></div>
+
+<!-- TOAST CONTAINER -->
+<div id="toast-root"></div>
+
+<script>
+/* ============================================================
+   DATA
+   ============================================================ */
+const LEVELS = [
+  {
+    id: 1, emoji: '🐍', color: 'var(--l1)', colorVar: '--l1', cls: 'lc1',
+    tag: 'Foundation',
+    title: 'Engineering Foundations',
+    desc: 'The non-negotiable base every AI engineer builds on. Master Python, data tools, and engineering fundamentals before touching any model.',
+    project: {
+      title: 'CLI Data Pipeline',
+      desc: 'Build a Python CLI tool that calls a public REST API, processes JSON responses, stores results in SQLite, and runs fully inside a Docker container. Share it on GitHub with a README.'
+    },
+    topics: [
+      {
+        name: '🐍 Python + Data Stack (NumPy, Pandas)',
+        why: 'Python is the language of AI. NumPy and Pandas are how you handle real messy data before it touches any model.',
+        task: 'Write a Pandas script that loads a CSV, cleans missing values, and prints summary statistics.',
+        xp: 30,
+        resources: [
+          { type:'free', name:'CS50P – Python (Harvard, free)', url:'https://cs50.harvard.edu/python/', desc:'The best free Python course. Rigorous, project-based.' },
+          { type:'free', name:'freeCodeCamp – Python Full Course (YouTube)', url:'https://youtu.be/rfscVS0vtbw', desc:'4-hour complete beginner Python crash course.' },
+          { type:'free', name:'Kaggle – Pandas (Free interactive)', url:'https://www.kaggle.com/learn/pandas', desc:'Hands-on Pandas exercises with free Kaggle notebooks.' },
+          { type:'paid', name:'Python Bootcamp – Udemy (Jose Portilla)', url:'https://www.udemy.com/course/complete-python-bootcamp/', desc:'Most comprehensive paid Python course. Goes very deep.' },
+        ]
+      },
+      {
+        name: '🔢 Math for ML (Linear Algebra & Probability)',
+        why: 'Vectors, matrices, gradients, and probability are the language under every AI model. Without this, fine-tuning and embeddings are black boxes.',
+        task: 'Watch 3Blue1Brown\'s "Essence of linear algebra" episodes 1–3 and write down what a dot product means in plain English.',
+        xp: 25,
+        resources: [
+          { type:'free', name:'3Blue1Brown – Essence of Linear Algebra (YouTube)', url:'https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab', desc:'The most beautiful visual explanation of linear algebra ever made.' },
+          { type:'free', name:'Khan Academy – Statistics & Probability (Free)', url:'https://www.khanacademy.org/math/statistics-probability', desc:'Complete probability course at your own pace, totally free.' },
+          { type:'free', name:'3Blue1Brown – Calculus (Essence of Calculus)', url:'https://www.youtube.com/playlist?list=PLZHQObOWTQDP5CVelJJ1bNDouqrAhVPev', desc:'Visual, intuitive calculus — just enough for understanding gradients.' },
+        ]
+      },
+      {
+        name: '🌿 Git & GitHub',
+        why: 'Every AI project you build must be version-controlled. Pull requests, branches, and commit history are professional requirements.',
+        task: 'Create a GitHub repo, make 3 commits with meaningful messages, and push a Python "hello world" script.',
+        xp: 20,
+        resources: [
+          { type:'free', name:'Pro Git Book (completely free online)', url:'https://git-scm.com/book/en/v2', desc:'The definitive Git reference. Chapters 1–3 are all you need to start.' },
+          { type:'free', name:'GitHub Skills (free interactive labs)', url:'https://skills.github.com/', desc:'Official GitHub interactive tutorials — finish in a few hours.' },
+        ]
+      },
+      {
+        name: '🌐 REST APIs & JSON',
+        why: 'All LLM APIs are REST APIs. You will call them thousands of times. Understanding HTTP, headers, and JSON is table stakes.',
+        task: 'Write a Python script using requests that calls a free public API (e.g. OpenWeatherMap) and pretty-prints the JSON response.',
+        xp: 20,
+        resources: [
+          { type:'free', name:'Real Python – APIs with Python (free article)', url:'https://realpython.com/python-api/', desc:'Practical, code-heavy guide to calling APIs from Python.' },
+          { type:'free', name:'HTTPie Playground (free online tool)', url:'https://httpie.io/app', desc:'Test any REST API without writing code first. Great for learning.' },
+        ]
+      },
+      {
+        name: '🐳 Docker',
+        why: 'Package your AI app so it runs anywhere — your machine, the cloud, CI pipelines. Every production AI system lives in containers.',
+        task: 'Dockerize your Python script from the REST API task. Write a Dockerfile, build the image, and run it.',
+        xp: 25,
+        resources: [
+          { type:'free', name:'Docker Getting Started (official docs, free)', url:'https://docs.docker.com/get-started/', desc:'Step-by-step from installation to running your first container.' },
+          { type:'free', name:'TechWorld with Nana – Docker Crash Course (YouTube)', url:'https://youtu.be/3c-iBn73dDE', desc:'Most-watched Docker beginner tutorial on YouTube.' },
+        ]
+      },
+      {
+        name: '🗄 SQL Basics',
+        why: 'AI lives next to data. You need to query, filter, join, and aggregate data from databases. SQLite is everywhere in AI projects.',
+        task: 'Create a SQLite database with Python, insert 10 rows, and write a query that filters and counts results.',
+        xp: 20,
+        resources: [
+          { type:'free', name:'SQLZoo (free interactive SQL)', url:'https://sqlzoo.net/', desc:'Browser-based SQL practice. No setup needed.' },
+          { type:'free', name:'Mode Analytics SQL Tutorial (free)', url:'https://mode.com/sql-tutorial/', desc:'Real-world SQL from a data analytics perspective.' },
+        ]
+      },
+    ]
+  },
+  {
+    id: 2, emoji: '🧠', color: 'var(--l2)', colorVar: '--l2', cls: 'lc2',
+    tag: 'LLM Core',
+    title: 'LLM Fundamentals',
+    desc: 'Understand how large language models think, fail, and what you can control as an engineer. Learn to talk to models effectively.',
+    project: {
+      title: 'Smart CLI Assistant',
+      desc: 'Build a CLI assistant with system prompts + function calling that answers questions about your local files, returns structured JSON output, and handles errors gracefully.'
+    },
+    topics: [
+      {
+        name: '✍ Prompt Engineering',
+        why: 'System prompts, chain-of-thought, few-shot, structured output. Your primary lever over model behavior.',
+        task: 'Write 3 different system prompts for the same task and compare outputs. Document which works best and why.',
+        xp: 30,
+        resources: [
+          { type:'free', name:'DeepLearning.AI – Prompt Engineering for Devs (free)', url:'https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/', desc:'Andrew Ng\'s free 1-day course. The best starting point.' },
+          { type:'free', name:'Anthropic Prompt Engineering Docs (free)', url:'https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview', desc:'Official Claude prompting guide with real patterns and examples.' },
+          { type:'free', name:'Learn Prompting (free open-source guide)', url:'https://learnprompting.org/', desc:'Community-built guide covering every prompting technique.' },
+        ]
+      },
+      {
+        name: '🔑 Tokens & Context Windows',
+        why: 'LLMs don\'t read words — they read tokens. Understanding tokenization, context limits, and costs is essential for building reliable systems.',
+        task: 'Use the OpenAI/Anthropic tokenizer to count tokens in 5 different prompts. Calculate the cost of running 1000 queries.',
+        xp: 20,
+        resources: [
+          { type:'free', name:'OpenAI Tokenizer (free tool)', url:'https://platform.openai.com/tokenizer', desc:'Visual tokenizer — see exactly how text becomes tokens.' },
+          { type:'free', name:'Hugging Face NLP Course – Ch 1–3 (free)', url:'https://huggingface.co/learn/nlp-course/chapter1/1', desc:'Deep dive into how transformers and tokenization work.' },
+        ]
+      },
+      {
+        name: '🤖 OpenAI / Anthropic / Gemini APIs',
+        why: 'Call frontier models programmatically. Learn rate limits, error handling, retries, and streaming responses.',
+        task: 'Write a Python script that calls an LLM API, handles rate limit errors with exponential backoff, and streams the response token by token.',
+        xp: 35,
+        resources: [
+          { type:'free', name:'OpenAI Cookbook (free GitHub repo)', url:'https://cookbook.openai.com/', desc:'Official recipes for every OpenAI API use case. Very practical.' },
+          { type:'free', name:'Anthropic API Docs (free)', url:'https://docs.anthropic.com/', desc:'Complete Claude API reference with working code examples.' },
+          { type:'free', name:'Google AI Studio (free tier)', url:'https://aistudio.google.com/', desc:'Free Gemini API access for learning. No credit card needed.' },
+        ]
+      },
+      {
+        name: '📐 Structured Outputs & Pydantic',
+        why: 'Force models to return valid, typed JSON. Without this, AI pipelines break on unexpected model outputs.',
+        task: 'Build a function that calls an LLM and returns a Pydantic model with at least 5 typed fields. Add validation.',
+        xp: 25,
+        resources: [
+          { type:'free', name:'Pydantic Docs (free)', url:'https://docs.pydantic.dev/', desc:'Official Pydantic documentation — the industry standard for data validation.' },
+          { type:'free', name:'Instructor Library (free open source)', url:'https://python.useinstructor.com/', desc:'The best library for structured LLM output. Built on Pydantic.' },
+        ]
+      },
+      {
+        name: '🛠 Function Calling / Tool Use',
+        why: 'Give LLMs tools — web search, code execution, database queries. This is where LLMs become genuinely useful agents.',
+        task: 'Build an LLM app with 2 custom tools (e.g. weather lookup and calculator). Let the model decide when to call each tool.',
+        xp: 35,
+        resources: [
+          { type:'free', name:'OpenAI Function Calling Guide (free)', url:'https://platform.openai.com/docs/guides/function-calling', desc:'Official guide with complete working code examples.' },
+          { type:'free', name:'DeepLearning.AI – Functions Tools Agents (free)', url:'https://www.deeplearning.ai/short-courses/functions-tools-agents-with-langchain/', desc:'Free short course specifically on function calling patterns.' },
+        ]
+      },
+      {
+        name: '📊 Basic Evals',
+        why: 'You can\'t improve what you don\'t measure. LLM-as-judge, test suites, and simple benchmarks from day one.',
+        task: 'Write 10 test cases for your LLM app. Use an LLM to judge whether outputs pass. Calculate your pass rate.',
+        xp: 25,
+        resources: [
+          { type:'free', name:'RAGAS – Evaluation Framework (free open source)', url:'https://docs.ragas.io/', desc:'The most used open-source LLM evaluation library.' },
+          { type:'free', name:'DeepLearning.AI – Evaluating LLM Apps (free)', url:'https://www.deeplearning.ai/short-courses/evaluating-debugging-generative-ai/', desc:'Practical evals course from DeepLearning.AI. Completely free.' },
+        ]
+      },
+    ]
+  },
+  {
+    id: 3, emoji: '🔥', color: 'var(--l3)', colorVar: '--l3', cls: 'lc3',
+    tag: 'ML Foundations',
+    title: 'ML Foundations',
+    desc: 'Understanding how models learn makes everything else click. Fine-tuning, embeddings, and open-source models become clear once you have this foundation.',
+    project: {
+      title: 'Fine-tuned Domain Expert',
+      desc: 'Fine-tune a small Llama model on a domain-specific dataset using QLoRA. Track experiments with MLflow. Push results to Hugging Face Hub. Document what improved.'
+    },
+    topics: [
+      {
+        name: '🤖 Scikit-learn & Classical ML',
+        why: 'Regression, classification, clustering, train/val/test splits. Understanding overfitting here saves you from expensive mistakes later with LLMs.',
+        task: 'Train a classification model on the Iris dataset. Evaluate with a confusion matrix. Try 3 different algorithms and compare accuracy.',
+        xp: 25,
+        resources: [
+          { type:'free', name:'Scikit-learn Official Tutorial (free)', url:'https://scikit-learn.org/stable/tutorial/', desc:'The best starting point. Every pattern you need is here.' },
+          { type:'free', name:'Google ML Crash Course (free)', url:'https://developers.google.com/machine-learning/crash-course', desc:'Google\'s free machine learning course. Visual and practical.' },
+          { type:'free', name:'StatQuest with Josh Starmer (YouTube, free)', url:'https://www.youtube.com/@statquest', desc:'Best visual explanations of ML concepts on the internet.' },
+        ]
+      },
+      {
+        name: '🔥 PyTorch Basics',
+        why: 'Tensors, autograd, and neural net layers. Even if you never train from scratch, you\'ll read PyTorch code constantly in AI engineering.',
+        task: 'Build a simple 2-layer neural network in PyTorch from scratch. Train it on a toy dataset. Plot the training loss curve.',
+        xp: 35,
+        resources: [
+          { type:'free', name:'Andrej Karpathy – Neural Nets Zero to Hero (YouTube)', url:'https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ', desc:'The most respected free deep learning course from OpenAI\'s former research director.' },
+          { type:'free', name:'PyTorch Official Tutorials (free)', url:'https://pytorch.org/tutorials/', desc:'Official tutorials with Jupyter notebooks. Start with "60 Minute Blitz".' },
+          { type:'paid', name:'fast.ai – Practical Deep Learning (free!)', url:'https://course.fast.ai/', desc:'Legendary free course. Top-down practical approach. Highly recommended.' },
+        ]
+      },
+      {
+        name: '📈 MLflow / DVC – Experiment Tracking',
+        why: 'Know what parameters produced what results. Without experiment tracking, you\'re doing science without a lab notebook.',
+        task: 'Set up MLflow locally. Run 5 training experiments with different hyperparameters. Compare them in the MLflow UI.',
+        xp: 20,
+        resources: [
+          { type:'free', name:'MLflow Quickstart (free docs)', url:'https://mlflow.org/docs/latest/quickstart.html', desc:'Get MLflow running in 15 minutes. Tracking experiments is simple.' },
+          { type:'free', name:'Weights & Biases – Free Tier', url:'https://wandb.ai/', desc:'The best experiment tracking tool in industry. Free for individuals.' },
+        ]
+      },
+      {
+        name: '🎛 Fine-tuning with LoRA / QLoRA',
+        why: 'Adapt a pretrained model to your domain with minimal data and compute. This is the most practical ML skill for AI engineers in 2026.',
+        task: 'Fine-tune a small model (e.g. Qwen 0.5B) using QLoRA on a custom dataset of at least 100 examples. Evaluate before vs after.',
+        xp: 45,
+        resources: [
+          { type:'free', name:'Hugging Face PEFT Library (free docs)', url:'https://huggingface.co/docs/peft', desc:'Official library for LoRA and QLoRA. Has beginner notebooks.' },
+          { type:'free', name:'DeepLearning.AI – Fine-tuning LLMs (free)', url:'https://www.deeplearning.ai/short-courses/finetuning-large-language-models/', desc:'Short free course specifically on fine-tuning. Great starting point.' },
+          { type:'book', name:'LLM Engineering Handbook – Labonne (Book)', url:'https://www.packtpub.com/en-us/product/llm-engineers-handbook-9781836200079', desc:'Best book on LLM engineering. Fine-tuning chapter is world-class.' },
+        ]
+      },
+      {
+        name: '🤗 Hugging Face Ecosystem',
+        why: 'Hub, Transformers, Datasets, Spaces — the GitHub of AI models. You will spend a huge amount of your career here.',
+        task: 'Download a model from HF Hub, run inference on 10 custom examples, and publish a model card to your own HF profile.',
+        xp: 25,
+        resources: [
+          { type:'free', name:'Hugging Face Course (free, official)', url:'https://huggingface.co/learn', desc:'The most comprehensive free course on the HF ecosystem.' },
+          { type:'free', name:'Hugging Face Spaces (free hosting)', url:'https://huggingface.co/spaces', desc:'Deploy AI demos for free. Great for portfolio projects.' },
+        ]
+      },
+      {
+        name: '🦙 Open-source Models with Ollama',
+        why: 'Run Llama, Mistral, and Qwen locally. No API costs, no data privacy concerns, and you understand what\'s inside the black box.',
+        task: 'Install Ollama, run Llama 3.2 locally, and build a simple chatbot that uses the local model instead of an API.',
+        xp: 25,
+        resources: [
+          { type:'free', name:'Ollama – Getting Started (free)', url:'https://ollama.ai/', desc:'The easiest way to run LLMs locally. One command to install.' },
+          { type:'free', name:'LM Studio (free desktop app)', url:'https://lmstudio.ai/', desc:'GUI for running and chatting with local models. No coding needed.' },
+        ]
+      },
+    ]
+  },
+  {
+    id: 4, emoji: '🔍', color: 'var(--l4)', colorVar: '--l4', cls: 'lc4',
+    tag: 'RAG & Retrieval',
+    title: 'RAG & Retrieval Systems',
+    desc: 'Give your LLM a memory. RAG is the number-one production AI pattern in 2026. Master every layer of it.',
+    project: {
+      title: 'Document Q&A System',
+      desc: 'Build a document Q&A system over a PDF corpus with hybrid search (BM25 + embeddings), reranking, and a RAGAS evaluation dashboard. Deploy as a simple web UI.'
+    },
+    topics: [
+      {
+        name: '🧬 Embeddings & Semantic Search',
+        why: 'Turn text into vectors. This is the mathematical foundation of RAG, recommendation systems, and semantic search.',
+        task: 'Embed 50 sentences with a HuggingFace model. Find the 5 most semantically similar to a query using cosine similarity.',
+        xp: 30,
+        resources: [
+          { type:'free', name:'Sentence Transformers Docs (free)', url:'https://www.sbert.net/', desc:'The go-to library for text embeddings. Tons of free pre-trained models.' },
+          { type:'free', name:'DeepLearning.AI – Embeddings & Vector Databases (free)', url:'https://www.deeplearning.ai/short-courses/vector-databases-embeddings-applications/', desc:'Free short course covering embeddings in real applications.' },
+        ]
+      },
+      {
+        name: '✂ Chunking Strategies',
+        why: 'Fixed-size, recursive, semantic, and hierarchical chunking. Bad chunking is the #1 reason RAG systems give wrong answers.',
+        task: 'Implement 3 chunking strategies on the same document. Compare retrieval quality by asking 10 questions against each.',
+        xp: 25,
+        resources: [
+          { type:'free', name:'Greg Kamradt – Chunking Strategies (YouTube free)', url:'https://youtu.be/8OJC21T2SL4', desc:'Best visual explanation of every chunking strategy with code.' },
+          { type:'free', name:'LangChain Text Splitters Docs (free)', url:'https://python.langchain.com/docs/modules/data_connection/document_transformers/', desc:'Official docs with all chunking options and when to use each.' },
+        ]
+      },
+      {
+        name: '🗃 Vector Databases (Qdrant / Pinecone / pgvector)',
+        why: 'Store and search millions of embeddings in milliseconds. Know at least one vector database deeply enough to tune it.',
+        task: 'Set up Qdrant locally. Index 1000 document chunks. Query it and measure retrieval latency at different collection sizes.',
+        xp: 30,
+        resources: [
+          { type:'free', name:'Qdrant Getting Started (free, open source)', url:'https://qdrant.tech/documentation/quickstart/', desc:'Best open-source vector DB. Free local + free cloud tier.' },
+          { type:'free', name:'pgvector with PostgreSQL (free)', url:'https://github.com/pgvector/pgvector', desc:'Add vector search to your existing Postgres database. No new infra.' },
+          { type:'free', name:'Pinecone Learning Center (free)', url:'https://www.pinecone.io/learn/', desc:'Great conceptual articles on vector search and RAG architecture.' },
+        ]
+      },
+      {
+        name: '🔀 Reranking & Hybrid Search',
+        why: 'Combine semantic + keyword search, then rerank with a cross-encoder. This is what separates good RAG from great RAG.',
+        task: 'Build hybrid search combining BM25 and embeddings. Add a cross-encoder reranker. Show the precision improvement with examples.',
+        xp: 35,
+        resources: [
+          { type:'free', name:'Cohere Reranking Guide (free)', url:'https://docs.cohere.com/docs/reranking', desc:'Clear explanation of reranking with free API access to try it.' },
+          { type:'free', name:'BM25 with rank_bm25 (free library)', url:'https://github.com/dorianbrown/rank_bm25', desc:'Simple Python BM25 implementation. Combine it with any embedding model.' },
+        ]
+      },
+      {
+        name: '🦜 LangChain / LlamaIndex',
+        why: 'RAG orchestration frameworks. LlamaIndex excels at retrieval pipelines. LangChain excels at chaining operations. Use both fluently.',
+        task: 'Build a complete RAG pipeline using LlamaIndex that can answer questions about a set of 5 documents you provide.',
+        xp: 35,
+        resources: [
+          { type:'free', name:'LlamaIndex Documentation (free)', url:'https://docs.llamaindex.ai/', desc:'Official LlamaIndex docs. Start with "Starter Tutorial".' },
+          { type:'free', name:'LangChain Python Docs (free)', url:'https://python.langchain.com/docs/', desc:'Official LangChain documentation. LCEL section is key.' },
+          { type:'paid', name:'RAG & AI Agents Masterclass – Udemy 2026', url:'https://www.udemy.com/course/generative-ai-rag/', desc:'Most comprehensive paid RAG course. Updated monthly for 2026.' },
+        ]
+      },
+      {
+        name: '📊 RAG Evaluation with RAGAS',
+        why: 'Measure faithfulness, answer relevance, context recall, and precision. RAG without evals is educated guesswork.',
+        task: 'Run RAGAS evaluation on your RAG pipeline. Identify the weakest metric and improve it. Re-evaluate and compare scores.',
+        xp: 30,
+        resources: [
+          { type:'free', name:'RAGAS Documentation (free, open source)', url:'https://docs.ragas.io/', desc:'The standard library for RAG evaluation. Great documentation.' },
+          { type:'free', name:'DeepLearning.AI – Building and Evaluating RAG (free)', url:'https://www.deeplearning.ai/short-courses/building-and-evaluating-advanced-rag/', desc:'Free short course specifically on RAG evaluation patterns.' },
+        ]
+      },
+    ]
+  },
+  {
+    id: 5, emoji: '🤖', color: 'var(--l5)', colorVar: '--l5', cls: 'lc5',
+    tag: 'Agents & Orchestration',
+    title: 'Agents & Orchestration',
+    desc: 'Build AI that takes actions, not just answers questions. Agents are the fastest-growing area in production AI engineering.',
+    project: {
+      title: 'Multi-Agent Research Assistant',
+      desc: 'Build a multi-agent system that searches the web, reads PDFs, writes a structured report, and streams its progress to a FastAPI + WebSocket frontend. Include MCP tool integration.'
+    },
+    topics: [
+      {
+        name: '🌐 LangGraph – Stateful Agents',
+        why: 'Build stateful, graph-based agent workflows with loops, conditions, and human-in-the-loop. The production standard in 2026.',
+        task: 'Build a ReAct agent in LangGraph with at least 3 tools and a conditional edge that retries on tool failure.',
+        xp: 45,
+        resources: [
+          { type:'free', name:'LangGraph Docs (free)', url:'https://langchain-ai.github.io/langgraph/', desc:'Official docs. Start with "Quick Start" then "How-to Guides".' },
+          { type:'free', name:'DeepLearning.AI – AI Agents in LangGraph (free)', url:'https://www.deeplearning.ai/short-courses/ai-agents-in-langgraph/', desc:'The definitive free course on LangGraph agents.' },
+        ]
+      },
+      {
+        name: '⚡ FastAPI – AI Backends',
+        why: 'Expose your AI logic as a scalable API. Every production AI product has a FastAPI backend behind it.',
+        task: 'Build a FastAPI server that wraps your LangGraph agent. Add authentication, rate limiting, and proper error responses.',
+        xp: 30,
+        resources: [
+          { type:'free', name:'FastAPI Official Tutorial (free)', url:'https://fastapi.tiangolo.com/tutorial/', desc:'The best API framework documentation anywhere. Complete and practical.' },
+          { type:'free', name:'TechWorld with Nana – FastAPI (YouTube free)', url:'https://youtu.be/0sOvCWFmrtA', desc:'Video walkthrough building a real FastAPI app from scratch.' },
+        ]
+      },
+      {
+        name: '🔌 MCP – Model Context Protocol',
+        why: 'Anthropic\'s protocol, now the industry standard for connecting agents to external tools. 97 million monthly SDK downloads. Every major AI provider supports it.',
+        task: 'Build a custom MCP server that exposes 2 tools (e.g. file reader + web search). Connect it to a Claude agent.',
+        xp: 40,
+        resources: [
+          { type:'free', name:'MCP Official Documentation (free)', url:'https://modelcontextprotocol.io/', desc:'Complete MCP documentation. Protocol spec + implementation guides.' },
+          { type:'free', name:'Anthropic MCP GitHub (free, open source)', url:'https://github.com/modelcontextprotocol', desc:'Official MCP repos with reference servers in Python, TypeScript.' },
+        ]
+      },
+      {
+        name: '🤖 Multi-Agent Systems (CrewAI)',
+        why: 'Orchestrate multiple specialized agents working together. The pattern behind complex AI pipelines like research assistants and coding agents.',
+        task: 'Build a 3-agent CrewAI system: a researcher, a writer, and an editor. Have them produce a 500-word article on a topic you choose.',
+        xp: 40,
+        resources: [
+          { type:'free', name:'CrewAI Documentation (free)', url:'https://docs.crewai.com/', desc:'Official CrewAI docs. Complete with examples and recipes.' },
+          { type:'free', name:'DeepLearning.AI – Multi AI Agent Systems (free)', url:'https://www.deeplearning.ai/short-courses/multi-ai-agent-systems-with-crewai/', desc:'Free short course from Andrew Ng on building multi-agent systems.' },
+        ]
+      },
+      {
+        name: '📡 Streaming & WebSockets',
+        why: 'Users hate waiting for complete responses. Streaming tokens live to the UI is now a baseline user expectation in AI products.',
+        task: 'Add WebSocket streaming to your FastAPI agent. Show tokens appearing in real-time in a simple HTML front-end.',
+        xp: 25,
+        resources: [
+          { type:'free', name:'FastAPI WebSockets Guide (free)', url:'https://fastapi.tiangolo.com/advanced/websockets/', desc:'Official FastAPI WebSockets tutorial with working code.' },
+          { type:'free', name:'Vercel AI SDK (free, open source)', url:'https://sdk.vercel.ai/docs', desc:'The best frontend toolkit for streaming AI responses.' },
+        ]
+      },
+      {
+        name: '🖼 Multimodal AI (Vision & Audio)',
+        why: 'Modern AI engineering goes beyond text. Vision APIs, image analysis, and audio transcription are now baseline skills.',
+        task: 'Build an app that accepts an image upload, describes it using a vision model, and answers follow-up questions about the image.',
+        xp: 30,
+        resources: [
+          { type:'free', name:'OpenAI Vision Guide (free)', url:'https://platform.openai.com/docs/guides/vision', desc:'Official guide to GPT-4 vision API with working examples.' },
+          { type:'free', name:'Whisper by OpenAI (free, open source)', url:'https://github.com/openai/whisper', desc:'State-of-the-art open-source audio transcription. Run locally.' },
+        ]
+      },
+    ]
+  },
+  {
+    id: 6, emoji: '📊', color: 'var(--l6)', colorVar: '--l6', cls: 'lc6',
+    tag: 'Ops & Evaluation',
+    title: 'Ops & Evaluation',
+    desc: 'If you can\'t measure it, you can\'t improve it. Observability and evals separate prototype builders from production engineers.',
+    project: {
+      title: 'Observable AI System',
+      desc: 'Add full observability to your RAG+agent system: LangSmith traces, cost tracking, automated LLM-as-judge evals, and a CI eval gate. Deploy to Google Cloud Run.'
+    },
+    topics: [
+      {
+        name: '🔍 LangSmith / Arize Phoenix',
+        why: 'Trace every LLM call, see token usage, latency, and errors. You are completely blind without observability in production.',
+        task: 'Instrument your RAG pipeline with LangSmith. Capture 20 traces. Find the slowest operation and optimize it.',
+        xp: 35,
+        resources: [
+          { type:'free', name:'LangSmith Documentation (free tier)', url:'https://docs.smith.langchain.com/', desc:'Official LangSmith docs. Free tier is generous enough for learning.' },
+          { type:'free', name:'Arize Phoenix (free, open source)', url:'https://phoenix.arize.com/', desc:'Best open-source LLM observability tool. No cloud needed.' },
+        ]
+      },
+      {
+        name: '⚖ LLM-as-Judge Evaluation',
+        why: 'Use a strong LLM to evaluate your weaker LLM\'s outputs at scale. The industry-standard evaluation pattern for production systems.',
+        task: 'Build an LLM-as-judge pipeline that evaluates 50 chatbot responses on accuracy, helpfulness, and tone. Calculate aggregate scores.',
+        xp: 30,
+        resources: [
+          { type:'free', name:'DeepLearning.AI – Automated Testing LLMs (free)', url:'https://www.deeplearning.ai/short-courses/automated-testing-llmops/', desc:'Free course specifically on LLM-as-judge evaluation patterns.' },
+          { type:'free', name:'Confident AI / DeepEval (free open source)', url:'https://docs.confident-ai.com/', desc:'Open-source framework with LLM-as-judge built in.' },
+        ]
+      },
+      {
+        name: '🌡 Tracing & Observability',
+        why: 'OpenTelemetry for AI, cost dashboards, latency P95 metrics. Running AI like professional production software requires proper monitoring.',
+        task: 'Add OpenTelemetry tracing to your AI app. Create a dashboard showing average latency, error rate, and cost per request.',
+        xp: 30,
+        resources: [
+          { type:'free', name:'OpenTelemetry Python Docs (free)', url:'https://opentelemetry.io/docs/languages/python/', desc:'Official OTel Python guide. The standard for distributed tracing.' },
+          { type:'free', name:'Grafana Cloud Free Tier', url:'https://grafana.com/products/cloud/', desc:'Free observability platform. Connect your traces and metrics here.' },
+        ]
+      },
+      {
+        name: '💰 Cost & Latency Optimization',
+        why: 'Know your cost per query. Semantic caching, model routing, and prompt compression can cut AI costs by 40–80% in production.',
+        task: 'Add semantic caching to your RAG app using GPTCache or Redis. Measure cache hit rate and cost reduction over 100 queries.',
+        xp: 25,
+        resources: [
+          { type:'free', name:'GPTCache (free, open source)', url:'https://github.com/zilliztech/GPTCache', desc:'Semantic cache for LLM APIs. Dramatically reduces API costs.' },
+          { type:'free', name:'LiteLLM (free, open source)', url:'https://github.com/BerriAI/litellm', desc:'One library to call all LLM APIs + cost tracking built in.' },
+        ]
+      },
+      {
+        name: '☁ Cloud Deployment (AWS / GCP)',
+        why: 'Docker alone is not enough. Deploying AI to cloud infrastructure with auto-scaling and managed databases is a real-world requirement.',
+        task: 'Deploy your AI app to Google Cloud Run with a CI/CD pipeline that runs your eval suite before deploying.',
+        xp: 35,
+        resources: [
+          { type:'free', name:'GCP Cloud Run Quickstart (free tier)', url:'https://cloud.google.com/run/docs/quickstarts', desc:'Deploy containerized AI apps to Google Cloud. Free tier included.' },
+          { type:'free', name:'AWS Free Tier (12 months free)', url:'https://aws.amazon.com/free/', desc:'12 months of free AWS services. Lambda, EC2, S3 for AI backends.' },
+        ]
+      },
+    ]
+  },
+  {
+    id: 7, emoji: '🛡', color: 'var(--l7)', colorVar: '--l7', cls: 'lc7',
+    tag: 'Safety & Responsibility',
+    title: 'Safety & Responsibility',
+    desc: 'Non-negotiable in 2026. Regulators, enterprises, and users all demand responsible AI. This is what separates professionals from amateurs.',
+    project: {
+      title: 'Hardened AI System',
+      desc: 'Red-team your RAG + agent system systematically. Write an AI System Card documenting capabilities and limitations. Add guardrails and a PII scrubbing layer. Publish it.'
+    },
+    topics: [
+      {
+        name: '🛡 Guardrails & Input/Output Filters',
+        why: 'Validate and sanitize LLM inputs and outputs. Prevent prompt injection, jailbreaks, and hallucination passthrough to end users.',
+        task: 'Add Guardrails AI to your app. Create validators for: topic relevance, toxic language, and PII detection in outputs.',
+        xp: 30,
+        resources: [
+          { type:'free', name:'Guardrails AI Docs (free, open source)', url:'https://docs.guardrailsai.com/', desc:'Open-source library for adding guardrails to any LLM app.' },
+          { type:'free', name:'NeMo Guardrails (NVIDIA, free)', url:'https://github.com/NVIDIA/NeMo-Guardrails', desc:'NVIDIA\'s open-source LLM guardrails. Great for enterprise use cases.' },
+        ]
+      },
+      {
+        name: '⚖ EU AI Act & GDPR Basics',
+        why: 'Know which risk tier your system falls in. High-risk AI has strict documentation requirements. Enterprises will ask you about this.',
+        task: 'Classify 3 AI system types under the EU AI Act risk framework. Write a one-page compliance checklist for a high-risk system.',
+        xp: 20,
+        resources: [
+          { type:'free', name:'EU AI Act – Official Full Text (free)', url:'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689', desc:'Read at least the risk classification section (Articles 6–7).' },
+          { type:'free', name:'NIST AI Risk Management Framework (free)', url:'https://www.nist.gov/artificial-intelligence', desc:'US government AI risk framework. Widely referenced by enterprises.' },
+        ]
+      },
+      {
+        name: '🔴 Red Teaming',
+        why: 'Systematically try to break your own system before attackers do. Adversarial prompts, prompt injection, and jailbreak attacks.',
+        task: 'Write 20 adversarial test cases for your AI app covering prompt injection, jailbreaks, and data exfiltration attempts. Document results.',
+        xp: 35,
+        resources: [
+          { type:'free', name:'DeepLearning.AI – Red Teaming LLM Apps (free)', url:'https://www.deeplearning.ai/short-courses/red-teaming-llm-applications/', desc:'Dedicated free course on red teaming LLM applications.' },
+          { type:'free', name:'Garak – LLM Vulnerability Scanner (free)', url:'https://github.com/leondz/garak', desc:'Open-source automated red teaming tool for LLMs.' },
+        ]
+      },
+      {
+        name: '🔒 PII Detection & Data Handling',
+        why: 'Never send personal data to third-party APIs without consent. Know data residency rules and how to scrub PII before it reaches models.',
+        task: 'Integrate Microsoft Presidio into your pipeline. Test it against 30 samples containing names, emails, and phone numbers.',
+        xp: 25,
+        resources: [
+          { type:'free', name:'Microsoft Presidio (free, open source)', url:'https://microsoft.github.io/presidio/', desc:'Production-grade PII detection and anonymization library from Microsoft.' },
+          { type:'free', name:'spaCy NER Tutorial (free)', url:'https://spacy.io/usage/training', desc:'Train custom named entity recognizers to detect domain-specific PII.' },
+        ]
+      },
+      {
+        name: '📋 AI System Cards & Risk Assessment',
+        why: 'Document your model\'s capabilities, limitations, failure modes, and biases. Increasingly required by law in enterprise deployments.',
+        task: 'Write a complete System Card for your RAG + agent project following the Hugging Face model card template.',
+        xp: 20,
+        resources: [
+          { type:'free', name:'Hugging Face Model Cards Guide (free)', url:'https://huggingface.co/docs/hub/model-cards', desc:'Official guide + template for writing AI system documentation.' },
+          { type:'free', name:'All Tech is Human – Responsible AI Courses (free)', url:'https://alltechishuman.org/rai-courses', desc:'5 free courses on responsible AI from an independent organization.' },
+        ]
+      },
+    ]
+  },
+  {
+    id: 8, emoji: '🚀', color: 'var(--l8)', colorVar: '--l8', cls: 'lc8',
+    tag: 'Production AI',
+    title: 'Production AI Engineer',
+    desc: 'Ship AI systems that scale, survive, and keep improving. This is the skill tier that the job market rewards most in 2026.',
+    project: {
+      title: 'Production AI Portfolio Project',
+      desc: 'Ship a complete AI product: RAG + agents + observability + evals + CI/CD + cloud deployment + scaling. Document it thoroughly and publish it as your portfolio centerpiece.'
+    },
+    topics: [
+      {
+        name: '🏗 End-to-End System Design',
+        why: 'Design for scale from day one: async queues, caching layers, graceful degradation, circuit breakers, and failover patterns.',
+        task: 'Draw the full architecture of your AI system including all services, databases, queues, and external APIs. Identify every single point of failure.',
+        xp: 40,
+        resources: [
+          { type:'free', name:'Made With ML – Production ML (free)', url:'https://madewithml.com/', desc:'End-to-end production ML course. Excellent system design content.' },
+          { type:'free', name:'Full Stack Deep Learning 2022 (free)', url:'https://fullstackdeeplearning.com/course/2022/', desc:'Production AI systems course from UC Berkeley. Free and excellent.' },
+          { type:'book', name:'Designing ML Systems – Chip Huyen', url:'https://www.oreilly.com/library/view/designing-machine-learning/9781098107963/', desc:'The definitive book on production ML system design.' },
+        ]
+      },
+      {
+        name: '🔀 Model Routing & Semantic Caching',
+        why: 'Route simple queries to cheap models and complex ones to frontier models. Semantic caching cuts production AI costs by 40%+ in real systems.',
+        task: 'Build a model router that sends simple queries to a small local model and complex ones to GPT-4. Benchmark cost vs quality tradeoff.',
+        xp: 35,
+        resources: [
+          { type:'free', name:'LiteLLM Router Docs (free)', url:'https://docs.litellm.ai/docs/routing', desc:'Production-ready model router with failover and cost tracking built in.' },
+          { type:'free', name:'RouteLLM (free, open source)', url:'https://github.com/lm-sys/RouteLLM', desc:'Research-backed model routing that achieves 85% cost reduction.' },
+        ]
+      },
+      {
+        name: '📡 Production Monitoring & Drift Detection',
+        why: 'AI degrades silently. Hallucination rates drift, data distributions shift, and performance degrades without any obvious signal.',
+        task: 'Set up monitoring that alerts you when your RAG system\'s faithfulness score drops below a threshold over a 24h window.',
+        xp: 35,
+        resources: [
+          { type:'free', name:'Evidently AI (free, open source)', url:'https://www.evidentlyai.com/', desc:'Open-source ML monitoring and drift detection. Production-grade.' },
+          { type:'free', name:'MLflow Model Monitoring (free)', url:'https://mlflow.org/docs/latest/models.html', desc:'Extend your existing MLflow setup with production monitoring.' },
+        ]
+      },
+      {
+        name: '🔁 CI/CD for AI (Continuous Evals)',
+        why: 'Every code change triggers an eval run. Regression in quality = failed deployment. This is how professional AI teams ship responsibly.',
+        task: 'Set up a GitHub Actions workflow that runs your RAGAS eval suite on every PR. Block merge if faithfulness drops below 0.8.',
+        xp: 40,
+        resources: [
+          { type:'free', name:'GitHub Actions for ML (free)', url:'https://github.com/features/actions', desc:'Official GitHub Actions. All the compute you need for eval pipelines.' },
+          { type:'free', name:'DVC + CML for CI/CD ML (free)', url:'https://cml.dev/', desc:'Continuous Machine Learning — GitHub Actions that report metrics on PRs.' },
+        ]
+      },
+      {
+        name: '📈 Scaling & Reliability',
+        why: 'Horizontal scaling, rate limit handling, retry logic, and SLAs for AI systems. The engineering discipline that lets you sleep at night.',
+        task: 'Load test your AI API with Locust at 100 concurrent users. Find the bottleneck. Optimize and retest until it handles the load.',
+        xp: 35,
+        resources: [
+          { type:'free', name:'Locust – Load Testing (free, open source)', url:'https://locust.io/', desc:'Python-based load testing. Simulate thousands of AI API users.' },
+          { type:'free', name:'vLLM – High-throughput LLM Serving (free)', url:'https://github.com/vllm-project/vllm', desc:'Serve open-source LLMs at 24x higher throughput than naive serving.' },
+        ]
+      },
+      {
+        name: '🧭 DSPy – Programmatic Prompt Optimization',
+        why: 'Optimize prompts using labeled data instead of manual tweaking. DSPy is how advanced AI engineers move beyond artisanal prompting.',
+        task: 'Port your RAG pipeline to DSPy. Use the BootstrapFewShot optimizer to improve answer quality on 20 labeled examples.',
+        xp: 40,
+        resources: [
+          { type:'free', name:'DSPy Documentation (free)', url:'https://dspy.ai/', desc:'Official DSPy docs. Start with the "Getting Started" tutorial.' },
+          { type:'free', name:'DSPy Paper & Notebooks (free)', url:'https://github.com/stanfordnlp/dspy', desc:'Stanford NLP GitHub repo. The notebooks are the best learning path.' },
+        ]
+      },
+    ]
+  },
+];
+
+/* ============================================================
+   STATE  (persisted in localStorage)
+   ============================================================ */
+function loadState() {
+  try {
+    const s = localStorage.getItem('aiquest_state');
+    if (s) return JSON.parse(s);
+  } catch(e) {}
+  return {
+    completedTopics: {},   // "levelId_topicIdx": true
+    completedProjects: {}, // "levelId": true
+    xp: 0,
+    streak: 0,
+    lastActiveDate: null,
+    userEmail: '',
+    userName: '',
+  };
+}
+
+function saveState() {
+  localStorage.setItem('aiquest_state', JSON.stringify(state));
+}
+
+let state = loadState();
+
+/* ===== XP thresholds per "player level" ===== */
+const XP_THRESHOLDS = [0, 500, 1200, 2200, 3500, 5200, 7200, 9800, 13000, 17000, 22000];
+
+function getPlayerLevel() {
+  for (let i = XP_THRESHOLDS.length - 1; i >= 0; i--) {
+    if (state.xp >= XP_THRESHOLDS[i]) return i + 1;
+  }
+  return 1;
+}
+
+function getXpProgress() {
+  const pl = getPlayerLevel();
+  const base = XP_THRESHOLDS[pl - 1] ?? 0;
+  const next = XP_THRESHOLDS[pl] ?? XP_THRESHOLDS[XP_THRESHOLDS.length - 1];
+  const pct = Math.min(100, Math.round(((state.xp - base) / (next - base)) * 100));
+  return { pct, current: state.xp - base, total: next - base, pl };
+}
+
+/* ===== Streak ===== */
+function updateStreak() {
+  const today = new Date().toDateString();
+  if (state.lastActiveDate === today) return;
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
+  if (state.lastActiveDate === yesterday) {
+    state.streak++;
+  } else if (state.lastActiveDate !== yesterday) {
+    state.streak = 1;
+  }
+  state.lastActiveDate = today;
+  saveState();
+}
+
+/* ===== Task completion count ===== */
+function getTodayKey() { return new Date().toDateString(); }
+
+function getLevelProgress(levelId) {
+  const lvl = LEVELS.find(l => l.id === levelId);
+  if (!lvl) return { done: 0, total: 0 };
+  const total = lvl.topics.length + 1; // +1 for project
+  let done = 0;
+  lvl.topics.forEach((_, i) => { if (state.completedTopics[`${levelId}_${i}`]) done++; });
+  if (state.completedProjects[levelId]) done++;
+  return { done, total };
+}
+
+function getTotalDone() {
+  let n = 0;
+  Object.values(state.completedTopics).forEach(v => { if (v) n++; });
+  Object.values(state.completedProjects).forEach(v => { if (v) n++; });
+  return n;
+}
+
+/* ============================================================
+   ROUTER
+   ============================================================ */
+let currentView = 'home'; // 'home' | 'level:N'
+
+function navigate(view) {
+  currentView = view;
+  render();
+  document.getElementById('main-content').scrollTop = 0;
+}
+
+/* ============================================================
+   SIDEBAR RENDER
+   ============================================================ */
+function renderSidebar() {
+  // Stats
+  document.getElementById('sb-streak').textContent = state.streak;
+  document.getElementById('sb-xp').textContent = state.xp;
+  document.getElementById('sb-done').textContent = getTotalDone();
+
+  // XP bar
+  const prog = getXpProgress();
+  document.getElementById('xp-bar').style.width = prog.pct + '%';
+  document.getElementById('xp-level-label').textContent = `Player Lv.${prog.pl}`;
+  document.getElementById('xp-to-next').textContent = `${prog.current} / ${prog.total} XP`;
+
+  // Nav
+  const nav = document.getElementById('nav-items');
+  nav.innerHTML = LEVELS.map(l => {
+    const { done, total } = getLevelProgress(l.id);
+    const pct = Math.round((done / total) * 100);
+    const isActive = currentView === `level:${l.id}`;
+    return `
+      <div class="nav-item ${isActive ? 'active' : ''}" onclick="navigate('level:${l.id}')">
+        <div class="nav-dot ${pct === 100 ? 'done' : ''}" style="color:${l.color}; border-color:${l.color}; ${pct===100?`background:${l.color}`:''}" ></div>
+        <span>${l.emoji} ${l.title}</span>
+        <span class="nav-progress-pill">${pct}%</span>
+      </div>
+    `;
+  }).join('');
+}
+
+/* ============================================================
+   HOME VIEW
+   ============================================================ */
+function renderHome() {
+  // Find first incomplete level
+  const nextLevel = LEVELS.find(l => {
+    const { done, total } = getLevelProgress(l.id);
+    return done < total;
+  }) || LEVELS[LEVELS.length - 1];
+
+  // Today's task
+  const todayTopicIdx = new Date().getDate() % nextLevel.topics.length;
+  const todayTopic = nextLevel.topics[todayTopicIdx];
+  const todayKey = `${nextLevel.id}_${todayTopicIdx}`;
+  const taskDone = state.completedTopics[todayKey];
+
+  const html = `
+    <div class="home-hero">
+      <div class="hero-greeting">👋 Welcome back${state.userName ? ', ' + state.userName : ''}!</div>
+      <div class="hero-title">Your path to becoming<br><span>an AI Engineer</span></div>
+      <div class="hero-sub">Complete daily tasks, earn XP, maintain your streak, and level up through 8 stages of mastery.</div>
+    </div>
+
+    <div class="mission-strip">
+      <div class="mission-flame">${taskDone ? '✅' : '🔥'}</div>
+      <div class="mission-body">
+        <div class="mission-label">Today's Mission</div>
+        <div class="mission-text">${todayTopic.name}</div>
+        <div class="mission-sub">Level ${nextLevel.id}: ${nextLevel.title} · ${todayTopic.xp} XP</div>
+      </div>
+      <button class="mission-btn" onclick="navigate('level:${nextLevel.id}')">
+        ${taskDone ? 'Review ✓' : 'Start →'}
+      </button>
+    </div>
+
+    <div class="path-section">
+      <div class="section-hd">All Levels</div>
+      <div class="level-path">
+        ${LEVELS.map(l => renderLevelNode(l)).join('')}
+      </div>
+    </div>
+  `;
+  document.getElementById('main-content').innerHTML = html;
+}
+
+function renderLevelNode(l) {
+  const { done, total } = getLevelProgress(l.id);
+  const pct = Math.round((done / total) * 100);
+  const circumference = 2 * Math.PI * 22;
+  const offset = circumference - (pct / 100) * circumference;
+
+  return `
+    <div class="level-node" onclick="navigate('level:${l.id}')">
+      <div class="level-node-header">
+        <div class="level-num-badge" style="background:${l.color}20; color:${l.color}">
+          ${l.emoji}
+        </div>
+        <div class="level-node-info">
+          <div class="level-node-tag" style="color:${l.color}">Level ${l.id} · ${l.tag}</div>
+          <div class="level-node-title">${l.title}</div>
+          <div class="level-node-sub">${l.topics.length} topics + 1 project</div>
+        </div>
+        <div class="level-node-right">
+          <div class="level-progress-ring">
+            <svg width="52" height="52" viewBox="0 0 52 52">
+              <circle class="ring-bg" cx="26" cy="26" r="22"/>
+              <circle class="ring-fill" cx="26" cy="26" r="22"
+                stroke="${l.color}"
+                stroke-dasharray="${circumference}"
+                stroke-dashoffset="${offset}"/>
+            </svg>
+            <div class="ring-pct" style="color:${l.color}">${pct}%</div>
+          </div>
+          <div class="level-xp-badge">+${l.topics.reduce((s,t)=>s+t.xp,0)} XP</div>
+        </div>
+      </div>
+      <div class="node-prog-bar">
+        <div class="node-prog-fill" style="width:${pct}%; background:${l.color}"></div>
+      </div>
+    </div>
+  `;
+}
+
+/* ============================================================
+   LEVEL VIEW
+   ============================================================ */
+function renderLevel(levelId) {
+  const l = LEVELS.find(x => x.id === levelId);
+  if (!l) return;
+  const { done, total } = getLevelProgress(levelId);
+  const pct = Math.round((done / total) * 100);
+  const totalXp = l.topics.reduce((s, t) => s + t.xp, 0);
+
+  const html = `
+    <div class="level-view">
+      <div class="level-topbar">
+        <button class="back-btn" onclick="navigate('home')">← Back</button>
+        <div>
+          <div class="topbar-title">${l.emoji} ${l.title}</div>
+          <div class="topbar-sub">Level ${l.id} · ${l.tag}</div>
+        </div>
+        <div class="topbar-xp">⚡ ${totalXp} XP available</div>
+      </div>
+
+      <div class="level-hero" style="background: linear-gradient(135deg, ${l.color}08, ${l.color}04);">
+        <div class="level-hero-icon">${l.emoji}</div>
+        <div class="level-hero-title" style="color:${l.color}">${l.title}</div>
+        <div class="level-hero-desc">${l.desc}</div>
+        <div class="prog-summary">
+          <div class="prog-chip">
+            <span class="prog-chip-val" style="color:${l.color}">${done}</span>
+            <span>/ ${total} done</span>
+          </div>
+          <div class="prog-chip">
+            <span class="prog-chip-val" style="color:var(--xp)">${pct}%</span>
+            <span>complete</span>
+          </div>
+          <div class="prog-chip">
+            <span class="prog-chip-val" style="color:var(--fire)">${state.streak}</span>
+            <span>day streak 🔥</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="topics-container">
+        <div class="section-hd">Topics</div>
+        <div class="topics-grid">
+          ${l.topics.map((t, i) => renderTopicCard(l, t, i)).join('')}
+        </div>
+
+        <div class="project-section">
+          <div class="section-hd">Level Project</div>
+          ${renderProjectCard(l)}
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('main-content').innerHTML = html;
+}
+
+function renderTopicCard(l, topic, idx) {
+  const key = `${l.id}_${idx}`;
+  const done = !!state.completedTopics[key];
+  return `
+    <div class="topic-card ${done ? 'completed' : ''}" id="topic-${l.id}-${idx}">
+      <div class="topic-header" onclick="toggleTopic(${l.id}, ${idx})">
+        <div class="topic-check">${done ? '✓' : ''}</div>
+        <div class="topic-info">
+          <div class="topic-name">${topic.name}</div>
+          <div class="topic-why">${topic.why}</div>
+        </div>
+        <div class="topic-right">
+          <div class="topic-xp">+${topic.xp} XP</div>
+          <div class="topic-expand-icon">▾</div>
+        </div>
+      </div>
+      <div class="resources-panel">
+        <div class="resources-title">Free & Paid Resources</div>
+        <div class="resource-list">
+          ${topic.resources.map(r => `
+            <a class="resource-item" href="${r.url}" target="_blank" rel="noopener">
+              <span class="resource-badge badge-${r.type}">${r.type === 'yt' ? 'YouTube' : r.type.toUpperCase()}</span>
+              <div>
+                <div class="resource-name">${r.name}</div>
+                <div class="resource-desc">${r.desc}</div>
+              </div>
+            </a>
+          `).join('')}
+        </div>
+
+        <div class="daily-task">
+          <div class="daily-task-label">📋 Today's Task</div>
+          <div class="daily-task-text">${topic.task}</div>
+        </div>
+
+        <button class="complete-btn ${done ? 'done' : 'not-done'}"
+          onclick="completeTopic(${l.id}, ${idx})"
+          ${done ? 'disabled' : ''}>
+          ${done ? '✅ Completed! +' + topic.xp + ' XP earned' : '✅ Mark as Complete (+' + topic.xp + ' XP)'}
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function renderProjectCard(l) {
+  const done = !!state.completedProjects[l.id];
+  return `
+    <div class="project-card">
+      <div class="project-label">🎯 Level ${l.id} Project</div>
+      <div class="project-title">${l.project.title}</div>
+      <div class="project-desc">${l.project.desc}</div>
+      <button class="project-complete-btn ${done ? 'done' : ''}"
+        onclick="completeProject(${l.id})"
+        ${done ? 'disabled' : ''}>
+        ${done ? '🏆 Project Complete!' : '🚀 Mark Project Complete (+150 XP)'}
+      </button>
+    </div>
+  `;
+}
+
+/* ============================================================
+   INTERACTIONS
+   ============================================================ */
+function toggleTopic(levelId, idx) {
+  const card = document.getElementById(`topic-${levelId}-${idx}`);
+  if (!card) return;
+  card.classList.toggle('expanded');
+}
+
+function completeTopic(levelId, idx) {
+  const key = `${levelId}_${idx}`;
+  if (state.completedTopics[key]) return;
+  const l = LEVELS.find(x => x.id === levelId);
+  const topic = l?.topics[idx];
+  if (!topic) return;
+
+  state.completedTopics[key] = true;
+  state.xp += topic.xp;
+  updateStreak();
+  saveState();
+
+  confetti();
+  showXpToast(`+${topic.xp} XP`, topic.name.replace(/^[\S]+\s/, ''));
+
+  // Re-render this card only
+  const card = document.getElementById(`topic-${levelId}-${idx}`);
+  if (card) {
+    card.classList.add('completed');
+    card.classList.remove('expanded');
+    const check = card.querySelector('.topic-check');
+    if (check) check.textContent = '✓';
+    const btn = card.querySelector('.complete-btn');
+    if (btn) {
+      btn.textContent = `✅ Completed! +${topic.xp} XP earned`;
+      btn.className = 'complete-btn done';
+      btn.disabled = true;
+    }
+    // Update resources panel button too
+    card.querySelector('.resources-panel .complete-btn').textContent = `✅ Completed! +${topic.xp} XP earned`;
+  }
+
+  // Update sidebar
+  renderSidebar();
+
+  // Check if all topics done — prompt email if no email set
+  const { done, total } = getLevelProgress(levelId);
+  if (done === total && !state.userEmail) {
+    setTimeout(showEmailModal, 800);
+  }
+}
+
+function completeProject(levelId) {
+  if (state.completedProjects[levelId]) return;
+  state.completedProjects[levelId] = true;
+  state.xp += 150;
+  updateStreak();
+  saveState();
+
+  confetti();
+  confetti(200);
+  showXpToast('+150 XP', 'Project complete! 🏆');
+  renderSidebar();
+
+  // Re-render level
+  const btn = document.querySelector('.project-complete-btn');
+  if (btn) {
+    btn.textContent = '🏆 Project Complete!';
+    btn.className = 'project-complete-btn done';
+    btn.disabled = true;
+  }
+}
+
+/* ============================================================
+   MAIN RENDER
+   ============================================================ */
+function render() {
+  updateStreak();
+  renderSidebar();
+
+  if (currentView === 'home') {
+    renderHome();
+  } else if (currentView.startsWith('level:')) {
+    const id = parseInt(currentView.split(':')[1]);
+    renderLevel(id);
+  }
+}
+
+/* ============================================================
+   EMAIL MODAL
+   ============================================================ */
+function showEmailModal() {
+  const root = document.getElementById('modal-root');
+  root.innerHTML = `
+    <div class="modal-backdrop" onclick="closeModalIfBackdrop(event)">
+      <div class="modal">
+        <div class="modal-icon">📧</div>
+        <div class="modal-title">Stay on track</div>
+        <div class="modal-sub">Set up a daily reminder email. If you miss a day without completing a task, AI Quest will send you a motivational nudge to keep your streak alive.</div>
+
+        <div class="email-preview">
+          <div class="email-header-bar">
+            <span>From: aiquest@noreply.com</span>
+            <span>Subject: 🔥 Your streak is at risk, ${state.userName || 'learner'}!</span>
+          </div>
+          <div class="email-body-preview">
+            <div class="email-subject">Don't break your streak! 😢</div>
+            Hey ${state.userName || 'there'}! You haven't completed today's task yet —
+            <strong>${state.streak} days</strong> of hard work could reset to zero.
+            Today's challenge: <em>just one topic</em>. It takes ~15 minutes.
+            <br><br>
+            Click below to jump back in and protect your streak 🔥
+          </div>
+        </div>
+
+        <div class="email-form">
+          <input type="text" class="email-input" id="modal-name" placeholder="Your first name" value="${state.userName || ''}">
+          <input type="email" class="email-input" id="modal-email" placeholder="your@email.com" value="${state.userEmail || ''}">
+          <button class="modal-save-btn" onclick="saveEmail()">💌 Save Reminder Settings</button>
+          <button class="modal-close" onclick="closeModal()">Maybe later</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function saveEmail() {
+  const name = document.getElementById('modal-name')?.value?.trim();
+  const email = document.getElementById('modal-email')?.value?.trim();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email || !emailRegex.test(email)) {
+    alert('Please enter a valid email address.');
+    return;
+  }
+  state.userName = name || '';
+  state.userEmail = email;
+  saveState();
+  closeModal();
+  showXpToast('+10 XP', 'Reminder set up! Stay consistent 🙌');
+  state.xp += 10;
+  saveState();
+  renderSidebar();
+  // Show confirmation
+  showToast(`📧 Reminder set for ${email}! You'll get a nudge if you miss a day.`);
+}
+
+function closeModal() {
+  document.getElementById('modal-root').innerHTML = '';
+}
+
+function closeModalIfBackdrop(e) {
+  if (e.target.classList.contains('modal-backdrop')) closeModal();
+}
+
+/* ============================================================
+   STREAK MODAL
+   ============================================================ */
+function showStreakModal() {
+  const root = document.getElementById('modal-root');
+  root.innerHTML = `
+    <div class="modal-backdrop" onclick="closeModalIfBackdrop(event)">
+      <div class="modal">
+        <div class="streak-card">
+          <span class="streak-flame-big">🔥</span>
+          <div class="streak-num">${state.streak}</div>
+          <div class="streak-label">Day Streak</div>
+        </div>
+        <div class="modal-sub" style="margin-top:20px">
+          ${state.streak === 0
+            ? 'Complete your first task today to start your streak!'
+            : state.streak < 7
+            ? `Great start! Keep going — 7 days builds a real habit.`
+            : state.streak < 30
+            ? `Impressive! ${state.streak} days of consistency. You're building something real.`
+            : `🏆 ${state.streak} days! You're in the top tier of self-learners.`}
+        </div>
+        <button class="modal-close" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+function showXpToast(xpText, message) {
+  const root = document.getElementById('toast-root');
+  const id = 'toast-' + Date.now();
+  root.innerHTML += `
+    <div class="xp-toast" id="${id}">
+      <span class="xp-toast-icon">⚡</span>
+      <div>
+        <div>${xpText}</div>
+        <div class="xp-toast-msg">${message}</div>
+      </div>
+    </div>
+  `;
+  setTimeout(() => { document.getElementById(id)?.remove(); }, 3500);
+}
+
+function showToast(msg) {
+  const root = document.getElementById('toast-root');
+  const id = 'toast-' + Date.now();
+  root.innerHTML += `
+    <div class="xp-toast" id="${id}" style="border-color:var(--gem);color:var(--gem)">
+      <span class="xp-toast-icon">✉️</span>
+      <div><div style="font-size:13px;line-height:1.4">${msg}</div></div>
+    </div>
+  `;
+  setTimeout(() => { document.getElementById(id)?.remove(); }, 4000);
+}
+
+/* ============================================================
+   CONFETTI
+   ============================================================ */
+function confetti(delay = 0) {
+  const colors = ['#6c63ff','#00c896','#ffd166','#ff6b6b','#4ecdc4','#f7931e','#58cc02'];
+  setTimeout(() => {
+    for (let i = 0; i < 40; i++) {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.cssText = `
+        left: ${Math.random() * 100}%;
+        background: ${colors[Math.floor(Math.random() * colors.length)]};
+        animation-duration: ${0.8 + Math.random() * 1.2}s;
+        animation-delay: ${Math.random() * 0.3}s;
+        width: ${6 + Math.random() * 8}px;
+        height: ${6 + Math.random() * 8}px;
+        border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+      `;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 2500);
+    }
+  }, delay);
+}
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+// Show email modal on first visit
+if (!state.userEmail && !state.userName) {
+  setTimeout(showEmailModal, 1500);
+}
+
+render();
+</script>
+</body>
+</html>
